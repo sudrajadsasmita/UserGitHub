@@ -1,4 +1,4 @@
-package com.sds.usergithub
+package com.sds.usergithub.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import kotlinx.android.synthetic.main.activity_main.view.*
+import com.sds.usergithub.R
+import com.sds.usergithub.UserGitHub
 import kotlinx.android.synthetic.main.item_row_user.view.*
 
 
@@ -37,13 +38,13 @@ class UserGitHubAdapter: RecyclerView.Adapter<UserGitHubAdapter.UserGithubViewHo
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): UserGitHubAdapter.UserGithubViewHolder {
+    ): UserGithubViewHolder {
         val view  = LayoutInflater.from(parent.context).inflate(R.layout.item_row_user, parent, false)
         return UserGithubViewHolder(view)
     }
 
     override fun getItemCount(): Int = mData.size
-    override fun onBindViewHolder(holder: UserGitHubAdapter.UserGithubViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserGithubViewHolder, position: Int) {
         holder.bind(mData[position])
     }
     interface OnItemClickCallback {

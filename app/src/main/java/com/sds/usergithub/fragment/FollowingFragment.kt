@@ -1,4 +1,4 @@
-package com.sds.usergithub
+package com.sds.usergithub.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,10 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
-import kotlinx.android.synthetic.main.fragment_followers.*
+import com.sds.usergithub.DetailActivity
+import com.sds.usergithub.R
+import com.sds.usergithub.UserGitHub
+import com.sds.usergithub.adapter.FollowingAdapter
 import kotlinx.android.synthetic.main.fragment_following.*
 import org.json.JSONArray
 
@@ -46,7 +49,9 @@ class FollowingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val userGitHub = activity?.intent?.getParcelableExtra<UserGitHub>(DetailActivity.EXTRA_USER)!!
+        val userGitHub = activity?.intent?.getParcelableExtra<UserGitHub>(
+            DetailActivity.EXTRA_USER
+        )!!
         followingAdapter = FollowingAdapter()
         AndroidNetworking.get("https://api.github.com/users/${userGitHub.username}/following")
             .addHeaders("Authorization", "token a430310dec032673be6e899c91309aa8ae6bb3de")
@@ -59,7 +64,18 @@ class FollowingFragment : Fragment() {
                         val items = response.getJSONObject(i)
                         val username = items.getString("login")
                         val profile = items.getString("avatar_url")
-                        list.add(UserGitHub(username, null, profile, null, null, null, null, null))
+                        list.add(
+                            UserGitHub(
+                                username,
+                                null,
+                                profile,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                            )
+                        )
                     }
                     showLoading(false)
                     rv_following.layoutManager  = LinearLayoutManager(activity)

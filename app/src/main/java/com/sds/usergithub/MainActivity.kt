@@ -1,6 +1,5 @@
 package com.sds.usergithub
 
-import android.app.ActionBar
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -12,17 +11,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
-import android.widget.Toast
-import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_CUSTOM
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.JSONObjectRequestListener
-import com.androidnetworking.interfaces.StringRequestListener
+import com.sds.usergithub.adapter.UserGitHubAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
 

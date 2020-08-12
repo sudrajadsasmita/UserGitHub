@@ -7,7 +7,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.fragment.app.FragmentManager
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
@@ -15,6 +14,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener
 import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.sds.usergithub.adapter.SectionPagerAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -69,7 +69,10 @@ class DetailActivity : AppCompatActivity() {
             })
         actionBack.setDisplayHomeAsUpEnabled(true)
 
-        val sectionPagerAdapter = SectionPagerAdapter(this, supportFragmentManager)
+        val sectionPagerAdapter = SectionPagerAdapter(
+            this,
+            supportFragmentManager
+        )
         view_pager.adapter = sectionPagerAdapter
         tabs.setupWithViewPager(view_pager)
         actionBack.elevation=0f

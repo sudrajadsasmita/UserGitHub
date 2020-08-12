@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    tools:context=".FollowersFragment">
+    tools:context=".fragment.FollowersFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.ContentLoadingProgressBar
