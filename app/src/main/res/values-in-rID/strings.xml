@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UserGitHub</string>
+    <string name="followers">Pengikuti</string>
+    <string name="follower">Mengikuti</string>
+    <string name="location">Lokasi</string>
+    <string name="cari_user">Cari User</string>
+    <string name="tab_text_1">Pengikut</string>
+    <string name="tab_text_2">Mengikuti</string>
+    <string name="app_user_github">Aplikasi Pengguna GitHub</string>\
+    <string name="change_language">Ubah Bahasa</string>
+    <!-- TODO: Remove or change this placeholder text -->
+</resources>
