@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
@@ -18,6 +19,7 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.sds.usergithub.adapter.UserGitHubAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -75,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                 .addHeaders("Authorization", "token a430310dec032673be6e899c91309aa8ae6bb3de")
                 .setPriority(Priority.HIGH)
                 .build()
-                .getAsJSONObject(object : JSONObjectRequestListener{
+                .getAsJSONObject(object : JSONObjectRequestListener {
                     override fun onResponse(response: JSONObject?) {
 
                         val items = response?.getJSONArray("items")
@@ -87,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                                 val avatar = item.getString("avatar_url")
                                 list.add(UserGitHub(username, null, avatar, null, null, null, null, null))
                             }
-                           showRecycleView(list)
+                            showRecycleView(list)
                         }catch (e : Exception){
                             Log.d("onResponse:", e.message.toString())
                         }
