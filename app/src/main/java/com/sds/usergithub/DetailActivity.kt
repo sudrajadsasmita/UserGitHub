@@ -20,6 +20,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class DetailActivity : AppCompatActivity() {
+    private var statusFavorite = false
     companion object{
         const val EXTRA_USER = "extra_user"
     }
@@ -76,6 +77,14 @@ class DetailActivity : AppCompatActivity() {
         view_pager.adapter = sectionPagerAdapter
         tabs.setupWithViewPager(view_pager)
         actionBack.elevation=0f
+
+        setStatusFavorite(statusFavorite)
+        fab1.setOnClickListener {
+            statusFavorite != statusFavorite
+
+            setStatusFavorite(statusFavorite)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -93,5 +102,13 @@ class DetailActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    private fun setStatusFavorite(statusFavorite: Boolean){
+        if (statusFavorite){
+            fab1.setImageResource(R.drawable.ic_favorite_true)
+        }else{
+            fab1.setImageResource(R.drawable.ic_favorite_false)
+        }
     }
 }
