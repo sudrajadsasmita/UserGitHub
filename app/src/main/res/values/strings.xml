@@ -9,5 +9,7 @@
     <string name="tab_text_2">Following</string>
     <string name="app_user_github">App User GitHub</string>
     <string name="change_language">Change Language</string>
+    <string name="tidak_ada_user_favorite">User Favorite Not Available</string>
+    <string name="favorite">Favorite</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

@@ -59,6 +59,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(Settings.ACTION_LOCALE_SETTINGS)
             startActivity(intent)
         }
+        if (item.itemId == R.id.favourite){
+            val intent = Intent(this, FavoriteActivity::class.java)
+            startActivity(intent)
+        }
         return super.onOptionsItemSelected(item)
     }
     fun setSearchUserData(name: String?){
