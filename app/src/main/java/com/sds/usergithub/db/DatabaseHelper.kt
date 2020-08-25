@@ -3,16 +3,16 @@ package com.sds.usergithub.db
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.AVATAR
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.COMPANY
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.FOLLOWERS
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.FOLLOWING
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.LOCATION
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.NAME
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.REPOSITORY
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.TABLE_NAME
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion.USERNAME
-import com.sds.usergithub.db.DatabaseContract.NoteColumns.Companion._ID
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.AVATAR
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.COMPANY
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.FOLLOWERS
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.FOLLOWING
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.LOCATION
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.NAME
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.REPOSITORY
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.TABLE_NAME
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion.USERNAME
+import com.sds.usergithub.db.DatabaseContract.UserColumns.Companion._ID
 
 
 internal class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -21,8 +21,8 @@ internal class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATAB
 
         private const val DATABASE_VERSION = 1
 
-        private val SQL_CREATE_TABLE_NOTE = "CREATE TABLE ${DatabaseContract.NoteColumns.TABLE_NAME}" +
-                "($_ID INTEGER PRIMARY KEY AUTOINCREMENT,"+
+        private val SQL_CREATE_TABLE_NOTE = "CREATE TABLE $TABLE_NAME" +
+                "($_ID INTEGER PRIMARY KEY,"+
                 "$USERNAME TEXT NOT NULL,"+
                 "$NAME TEXT NOT NULL,"+
                 "$AVATAR TEXT NOT NULL,"+

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/civ_profile"
+        android:id="@+id/civ_profileFav"
         android:layout_width="77dp"
         android:layout_height="77dp"
         android:layout_marginStart="16dp"
@@ -18,14 +18,14 @@
         tools:src="@drawable/person" />
 
     <TextView
-        android:id="@+id/tv_username"
+        android:id="@+id/tv_usernameFav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/civ_profile"
+        app:layout_constraintStart_toEndOf="@+id/civ_profileFav"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Username" />
 

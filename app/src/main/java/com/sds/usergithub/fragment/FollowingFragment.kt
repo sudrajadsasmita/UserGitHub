@@ -12,12 +12,18 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONArrayRequestListener
+import com.loopj.android.http.AsyncHttpClient
+import com.loopj.android.http.AsyncHttpResponseHandler
 import com.sds.usergithub.DetailActivity
 import com.sds.usergithub.R
 import com.sds.usergithub.UserGitHub
+import com.sds.usergithub.adapter.FollowersAdapter
 import com.sds.usergithub.adapter.FollowingAdapter
+import cz.msebera.android.httpclient.Header
+import kotlinx.android.synthetic.main.fragment_followers.*
 import kotlinx.android.synthetic.main.fragment_following.*
 import org.json.JSONArray
+import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,19 +59,27 @@ class FollowingFragment : Fragment() {
             DetailActivity.EXTRA_USER
         )!!
         followingAdapter = FollowingAdapter()
-        AndroidNetworking.get("https://api.github.com/users/${userGitHub.username}/following")
-            .addHeaders("Authorization", "token a430310dec032673be6e899c91309aa8ae6bb3de")
-            .setPriority(Priority.HIGH)
-            .build()
-            .getAsJSONArray(object : JSONArrayRequestListener {
-                override fun onResponse(response: JSONArray) {
-                    showLoading(true)
-                    for (i in 0 until response.length()){
-                        val items = response.getJSONObject(i)
+
+        val url = "https://api.github.com/users/${userGitHub.username}/following"
+        val client = AsyncHttpClient()
+        client.addHeader("Authorization", "token a430310dec032673be6e899c91309aa8ae6bb3de")
+        client.addHeader("User-Agent", "request")
+        client.get(url, object : AsyncHttpResponseHandler(){
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<out Header>?,
+                responseBody: ByteArray?
+            ) {
+                try {
+                    val result = String(responseBody!!)
+                    val responseArray = JSONArray(result)
+                    for (i in 0 until responseArray.length()){
+                        val items = responseArray.getJSONObject(i)
                         val username = items.getString("login")
                         val profile = items.getString("avatar_url")
                         list.add(
                             UserGitHub(
+                                null,
                                 username,
                                 null,
                                 profile,
@@ -88,13 +102,20 @@ class FollowingFragment : Fragment() {
                             startActivity(intent)
                         }
                     })
+                }catch (e: Exception){
+                    Log.d("onResponse:", e.message.toString())
                 }
+            }
 
-                override fun onError(anError: ANError?) {
-                    Log.e("onError", anError.toString())
-                }
-
-            })
+            override fun onFailure(
+                statusCode: Int,
+                headers: Array<out Header>?,
+                responseBody: ByteArray?,
+                error: Throwable?
+            ) {
+                Log.e("onError", error.toString())
+            }
+        })
         return inflater.inflate(R.layout.fragment_following, container, false)
     }
 

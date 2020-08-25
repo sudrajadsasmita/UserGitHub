@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class UserGitHub (
+    var id: Int? = null,
     var username : String? = null,
     val name : String? = null,
     var avatar : String? = null,

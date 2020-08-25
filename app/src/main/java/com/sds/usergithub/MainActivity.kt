@@ -17,7 +17,11 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.JSONObjectRequestListener
+import com.loopj.android.http.AsyncHttpClient
+import com.loopj.android.http.AsyncHttpResponseHandler
+import com.loopj.android.http.SyncHttpClient
 import com.sds.usergithub.adapter.UserGitHubAdapter
+import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -76,32 +80,42 @@ class MainActivity : AppCompatActivity() {
             showTextView(false)
             showLoading(true)
             userGitHubAdapter = UserGitHubAdapter()
-            AndroidNetworking.initialize(this)
-            AndroidNetworking.get("https://api.github.com/search/users?q=$name")
-                .addHeaders("Authorization", "token a430310dec032673be6e899c91309aa8ae6bb3de")
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(object : JSONObjectRequestListener {
-                    override fun onResponse(response: JSONObject?) {
-
-                        val items = response?.getJSONArray("items")
-                        try {
-                            for (i in 0 until items!!.length()){
-
-                                val item = items.getJSONObject(i)
-                                val username = item.getString("login")
-                                val avatar = item.getString("avatar_url")
-                                list.add(UserGitHub(username, null, avatar, null, null, null, null, null))
-                            }
-                            showRecycleView(list)
-                        }catch (e : Exception){
-                            Log.d("onResponse:", e.message.toString())
+            val url = "https://api.github.com/search/users?q=$name"
+            val client = AsyncHttpClient()
+            client.addHeader("Authorization", "token a430310dec032673be6e899c91309aa8ae6bb3de")
+            client.addHeader("User-Agent", "request")
+            client.get(url, object :AsyncHttpResponseHandler(){
+                override fun onSuccess(
+                    statusCode: Int,
+                    headers: Array<out Header>?,
+                    responseBody: ByteArray?
+                ) {
+                    try {
+                        val result = String(responseBody!!)
+                        val responseObject = JSONObject(result)
+                        val items = responseObject.getJSONArray("items")
+                        for (i in 0 until items.length()){
+                            val item = items.getJSONObject(i)
+                            val username = item.getString("login")
+                            val avatar = item.getString("avatar_url")
+                            list.add(UserGitHub(null,username, null, avatar, null, null, null, null, null))
+                            //Log.d("onSuccess : ", username)
                         }
+                        showRecycleView(list)
+                    }catch (e: Exception){
+                        Log.d("onResponse:", e.message.toString())
                     }
-                    override fun onError(anError: ANError?) {
-                        Log.e("onError", anError.toString())
-                    }
-                })
+                }
+
+                override fun onFailure(
+                    statusCode: Int,
+                    headers: Array<out Header>?,
+                    responseBody: ByteArray?,
+                    error: Throwable?
+                ) {
+                    Log.e("onError", error.toString())
+                }
+            })
         }
     }
     fun showRecycleView(list : ArrayList<UserGitHub>){

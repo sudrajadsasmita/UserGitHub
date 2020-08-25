@@ -3,7 +3,7 @@ package com.sds.usergithub.db
 import android.provider.BaseColumns
 
 internal class DatabaseContract {
-    internal class NoteColumns: BaseColumns{
+    internal class UserColumns: BaseColumns{
         companion object{
             const val TABLE_NAME = "tb_user"
             const val _ID = "_id"
