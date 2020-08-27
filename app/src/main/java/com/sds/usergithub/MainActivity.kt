@@ -1,33 +1,23 @@
 package com.sds.usergithub
 
-import android.app.SearchManager
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.SearchView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.androidnetworking.AndroidNetworking
-import com.androidnetworking.common.Priority
-import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.JSONObjectRequestListener
-import com.loopj.android.http.AsyncHttpClient
-import com.loopj.android.http.AsyncHttpResponseHandler
-import com.loopj.android.http.SyncHttpClient
 import com.sds.usergithub.adapter.UserGitHubAdapter
-import cz.msebera.android.httpclient.Header
+import com.sds.usergithub.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONArray
-import org.json.JSONObject
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var mainViewModel: MainViewModel
     private val list = ArrayList<UserGitHub>()
     private lateinit var userGitHubAdapter: UserGitHubAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,27 +25,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         showLoading(false)
         showTextView(true)
+        list.clear()
+        userGitHubAdapter = UserGitHubAdapter()
+        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+            MainViewModel::class.java)
+        edt_search.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                getUserData(p0.toString())
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.option_menu, menu)
-
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu?.findItem(R.id.search)?.actionView as SearchView
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.queryHint = resources.getString(R.string.cari_user)
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-               return false
-            }
-            override fun onQueryTextChange(p0: String?): Boolean {
-
-                setSearchUserData(p0)
-                return true
-            }
-        })
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -69,56 +60,26 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-    fun setSearchUserData(name: String?){
+    private fun getUserData(name: String){
+        showLoading(true)
+        showTextView(false)
+        val user = ArrayList<UserGitHub>()
         if (name == ""){
-            list.clear()
-            showTextView(true)
             showLoading(false)
-            showRecycleView(list)
+            showTextView(true)
+            showRecycleView(user)
         }else{
-            list.clear()
-            showTextView(false)
-            showLoading(true)
-            userGitHubAdapter = UserGitHubAdapter()
-            val url = "https://api.github.com/search/users?q=$name"
-            val client = AsyncHttpClient()
-            client.addHeader("Authorization", "token a430310dec032673be6e899c91309aa8ae6bb3de")
-            client.addHeader("User-Agent", "request")
-            client.get(url, object :AsyncHttpResponseHandler(){
-                override fun onSuccess(
-                    statusCode: Int,
-                    headers: Array<out Header>?,
-                    responseBody: ByteArray?
-                ) {
-                    try {
-                        val result = String(responseBody!!)
-                        val responseObject = JSONObject(result)
-                        val items = responseObject.getJSONArray("items")
-                        for (i in 0 until items.length()){
-                            val item = items.getJSONObject(i)
-                            val username = item.getString("login")
-                            val avatar = item.getString("avatar_url")
-                            list.add(UserGitHub(null,username, null, avatar, null, null, null, null, null))
-                            //Log.d("onSuccess : ", username)
-                        }
-                        showRecycleView(list)
-                    }catch (e: Exception){
-                        Log.d("onResponse:", e.message.toString())
-                    }
-                }
-
-                override fun onFailure(
-                    statusCode: Int,
-                    headers: Array<out Header>?,
-                    responseBody: ByteArray?,
-                    error: Throwable?
-                ) {
-                    Log.e("onError", error.toString())
+            mainViewModel.setUser(name)
+            mainViewModel.getUser().observe(this@MainActivity, Observer { cek ->
+                if (cek != null){
+                    showLoading(false)
+                    showTextView(false)
+                    showRecycleView(cek)
                 }
             })
         }
     }
-    fun showRecycleView(list : ArrayList<UserGitHub>){
+    private fun showRecycleView(list : ArrayList<UserGitHub>){
         showLoading(false)
         rv_user.layoutManager  = LinearLayoutManager(this@MainActivity)
         rv_user.adapter = userGitHubAdapter
@@ -131,14 +92,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-    fun showLoading(state: Boolean) {
+    private fun showLoading(state: Boolean) {
         if (state) {
             progressBar.visibility = View.VISIBLE
         } else {
             progressBar.visibility = View.GONE
         }
     }
-    fun showTextView(state: Boolean){
+    private fun showTextView(state: Boolean){
         if (state) {
             tv_app.visibility = View.VISIBLE
         } else {
